@@ -41,3 +41,5 @@ router.post('/', upload.single('image'), async (req, res) => {
         res.status(500).json({ message: 'Error creating post' });
     }    
 });
+
+module.exports = router; // export router
