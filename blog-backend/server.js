@@ -9,7 +9,7 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use('/api/posts', postRoutes);
 
-mongoose.connect('mongodb:localhost:27017/blog', {
+mongoose.connect('mongodb://localhost:27017/blog', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {

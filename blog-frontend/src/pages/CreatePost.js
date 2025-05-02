@@ -1,31 +1,27 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import reactMde from 'react-mde';
+import ReactMde from 'react-mde';
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import { useNavigate } from 'react-router-dom';
-
 function CreatePost() {
     const navigate = useNavigate(); 
-
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [tags, setTags] = useState('');
     const [image, setImage] = useState(null);
     const [selectedTab, setSelectedTab] = useState('write'); 
-
+    const [success, setSuccess] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent default form submission behavior
         setSuccess(false); // Reset success state
-
         let imageUrl = ''; // Initialize imageURL to null
-
         try {
             if (image) {
               const formData = new FormData();
               formData.append('image', image);
       
-              const uploadRes = await Axios.post('/api/posts/upload', formData, {
+              const uploadRes = await Axios.post('http://localhost:5000/api/posts/upload', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
               });
       
@@ -36,7 +32,7 @@ function CreatePost() {
               ? `${content}\n\n![Uploaded Image](${imageUrl})`
               : content;
       
-            await axios.post('/api/posts', {
+            await Axios.post('http://localhost:5000/api/posts', {
               title,
               content: finalContent,
               tags
@@ -67,7 +63,7 @@ function CreatePost() {
       
               {/* Markdown editor */}
               <div style={{ marginBottom: '1rem' }}>
-                <reactMde
+                <ReactMde
                   value={content}
                   onChange={setContent}
                   selectedTab={selectedTab}
@@ -117,4 +113,4 @@ function CreatePost() {
          </div>
     );
 }
-export default CreatePost; 
+export default CreatePost;
