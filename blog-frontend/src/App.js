@@ -9,6 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/posts/:id" element={<PostPage />} />
+        <Route path="/create" element={<CreatePost />} />
       </Routes>
     </Router>
   );

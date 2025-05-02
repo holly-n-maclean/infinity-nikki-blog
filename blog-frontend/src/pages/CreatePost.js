@@ -1,122 +1,120 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import reactMde from 'react-mde';
+import 'react-mde/lib/styles/css/react-mde-all.css'
+import { useNavigate } from 'react-router-dom';
 
 function CreatePost() {
+    const navigate = useNavigate(); 
+
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [tags, setTags] = useState('');
     const [image, setImage] = useState(null);
-    const [success, setSuccess] = useState(false);
-    const [imageUpload, setImageUpload] = useState(null); 
+    const [selectedTab, setSelectedTab] = useState('write'); 
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent default form submission behavior
         setSuccess(false); // Reset success state
 
-
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        formData.append('tags', tags.split(','));
-        if (image) { formData.append('image', image); } // Append image file if there is one
+        let imageUrl = ''; // Initialize imageURL to null
 
         try {
-            await Axios.post('http://localhost:5000/posts', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            setTitle(''); // Reset title input
-            setContent(''); // Reset content input
-            setTags(''); // Reset tags input
-            setImage(null); // Reset image input
-        } catch (error) {
-            console.error('error creating post:', error);
-        }
-    };
-
-    const handleImageUpload = async ()=> {
-        if (!imageUpload) return; // Check if an image is selected
-        const formData = new FormData();
-        formData.append('image', imageUpload); // Append the selected image file
-        try {
-            const res = await Axios.post('http://localhost:5000/upload', formData);
-            const fileName = res.data.fileName; // Get the filename from the response
-            const url = `http://localhost:5000/uploads/${fileName}`; // Construct the URL for the uploaded image
-            setImage(url); 
-            } catch (err) {
-                console.error('Error uploading image:', err); // Log upload errors
+            if (image) {
+              const formData = new FormData();
+              formData.append('image', image);
+      
+              const uploadRes = await Axios.post('/api/posts/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+              });
+      
+              imageUrl = `/uploads/${uploadRes.data.filename}`;
             }
+      
+            const finalContent = imageUrl
+              ? `${content}\n\n![Uploaded Image](${imageUrl})`
+              : content;
+      
+            await axios.post('/api/posts', {
+              title,
+              content: finalContent,
+              tags
+            });
+      
+            navigate('/');
+          } catch (error) {
+            console.error('Error creating post:', error);
+          }
         };
-
-
-    return (
-        <div style={{ padding: '2rem' }}>
-            <h2>Create New Blog Post</h2>
-            {success && <p style={{ color: 'green' }}>Post created!</p>}
-            
+      
+        return (
+          <div className="container">
+            <h1>Create a New Post</h1>
+      
             <form onSubmit={handleSubmit}>
-                {/* Title input */}
-                <div>
-                    <label>Title:</label><br />
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
-                </div>
-
-                {/* Content input */}
-                <div>
-                    <label>Content:</label><br />
-                    <textarea
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        required
-                        rows={10}
-                    />
-                </div>
-
-                {/* Tags input */}
-                <div>
-                    <label>Tags (comma separated):</label><br />
-                    <input
-                        type="text"
-                        value={tags}
-                        onChange={(e) => setTags(e.target.value)}
-                    />
-                </div>
-
-                {/* Upload Image */}
-                <div>
-                    <label>Image:</label><br />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setImageUpload(e.target.files[0])}
-                    />
-                    <button type="button" onClick={handleImageUpload}>Upload Image</button>
-                </div>
-
-                {image && (
-                    <div>
-                        <p>Image uploaded! Paste in your content:</p>
-                        <code>![alt text]({imageURL})</code>
-                    </div>
-                )}
-
-                <br />
-                <button type="submit">Create Post</button>
+              {/* Title */}
+              <div style={{ marginBottom: '1rem' }}>
+                <input
+                  type="text"
+                  placeholder="Post Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                  style={{ width: '100%', padding: '0.5rem' }}
+                />
+              </div>
+      
+              {/* Markdown editor */}
+              <div style={{ marginBottom: '1rem' }}>
+                <reactMde
+                  value={content}
+                  onChange={setContent}
+                  selectedTab={selectedTab}
+                  onTabChange={setSelectedTab}
+                  generateMarkdownPreview={markdown =>
+                    Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
+                  }
+                  minEditorHeight={200}
+                />
+              </div>
+      
+              {/* Tags */}
+              <div style={{ marginBottom: '1rem' }}>
+                <input
+                  type="text"
+                  placeholder="Tags (comma separated)"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  style={{ width: '100%', padding: '0.5rem' }}
+                />
+              </div>
+      
+              {/* Image upload */}
+              <div style={{ marginBottom: '1rem' }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+              </div>
+      
+              {/* Submit button */}
+              <button
+                type="submit"
+                style={{
+                  padding: '0.7rem 1.5rem',
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+                Create Post
+              </button>
             </form>
-
-            <br />
-            <h3>Preview:</h3>
-            <ReactMarkdown>{content}</ReactMarkdown>
-            </div>
+         </div>
     );
-            
 }
-
 export default CreatePost; 
