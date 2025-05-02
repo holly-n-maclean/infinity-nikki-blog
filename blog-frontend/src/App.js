@@ -1,12 +1,16 @@
 import React from 'react';
 import Home from './pages/Home';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import PostPage from './pages/PostPage';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Infinity Nikki Fashion Blog</h1>
-      <Home />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/posts/:id" element={<PostPage />} />
+      </Routes>
+    </Router>
   );
 }
 
