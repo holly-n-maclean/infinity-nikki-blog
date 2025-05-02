@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+console.log('✅ posts.js router loaded');
 const multer = require('multer'); // handle file uploads
 const path = require('path'); // handle file paths
 const Post = require('../models/Post'); // import Post model
@@ -16,6 +17,10 @@ const storage = multer.diskStorage({
 
 
 const upload = multer({ storage });
+
+router.get('/test', (req, res) => {
+    res.send('Posts route is working!');
+  });
 
 //GET all posts
 router.get('/', async (req, res) => {
@@ -90,6 +95,19 @@ router.put('/:id', async (req, res) => {
     res.json({ filename: req.file.filename });
   });
 
+  
+  // DELETE a post by ID
+  router.delete('/:id', async (req, res) => {
+    console.log('Received DELETE request for ID:', req.params.id);
+    try {
+      const deleted = await Post.findByIdAndDelete(req.params.id);
+      if (!deleted) return res.status(404).json({ error: 'Post not found' });
+      res.json({ message: 'Post successfully deleted' });
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      res.status(500).json({ error: 'Could not delete post' });
+    }
+  });
 
 
 module.exports = router; // export router
