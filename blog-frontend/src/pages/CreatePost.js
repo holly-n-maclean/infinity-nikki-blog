@@ -12,30 +12,31 @@ function CreatePost() {
   const [tags, setTags] = useState('');
   const [selectedTab, setSelectedTab] = useState('write');
   const [success, setSuccess] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
 
-  // ✅ Upload and embed image
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-      const res = await Axios.post('http://localhost:5000/api/posts/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      const imageUrl = `http://localhost:5000/uploads/${res.data.filename}`;
-      const markdownImage = `\n\n![Uploaded Image](${imageUrl})\n`;
-
-      setContent(prev => prev + markdownImage); // insert markdown
-      setImagePreview(imageUrl); // show preview
-
-    } catch (err) {
-      console.error('Image upload failed:', err);
-      alert('Failed to upload image.');
+  const handleImagesChange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+  
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('image', file);
+  
+      try {
+        const res = await Axios.post('http://localhost:5000/api/posts/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+  
+        const imageUrl = `http://localhost:5000/uploads/${res.data.filename}`;
+        const markdownImage = `\n\n![Uploaded Image](${imageUrl})\n`;
+  
+        // ✅ Immediately insert the image markdown into the editor content
+        setContent(prev => prev + markdownImage);
+  
+      } catch (err) {
+        console.error('Error uploading image:', err);
+        alert(`Failed to upload: ${file.name}`);
+      }
     }
   };
 
@@ -43,10 +44,26 @@ function CreatePost() {
     e.preventDefault();
     setSuccess(false);
 
+    let finalContent = content;
+
     try {
+      if (imageFiles.length > 0) {
+        for (const file of imageFiles) {
+          const formData = new FormData();
+          formData.append('image', file);
+
+          const res = await Axios.post('http://localhost:5000/api/posts/upload', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+
+          const imageUrl = `http://localhost:5000/uploads/${res.data.filename}`;
+          finalContent += `\n\n![Uploaded Image](${imageUrl})\n`;
+        }
+      }
+
       await Axios.post('http://localhost:5000/api/posts', {
         title,
-        content,
+        content: finalContent,
         tags
       });
 
@@ -74,7 +91,7 @@ function CreatePost() {
           />
         </div>
 
-        {/* ReactMde Markdown Editor */}
+        {/* Markdown Editor */}
         <div style={{ marginBottom: '1rem' }}>
           <ReactMde
             value={content}
@@ -82,7 +99,24 @@ function CreatePost() {
             selectedTab={selectedTab}
             onTabChange={setSelectedTab}
             generateMarkdownPreview={markdown =>
-              Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
+              Promise.resolve(<ReactMarkdown
+                components={{
+                  img: ({ node, ...props }) => (
+                    <img
+                      {...props}
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                        borderRadius: '8px',
+                        margin: '1rem 0',
+                        display: 'block',
+                        boxShadow: '0 1px 6px rgba(0,0,0,0.1)',
+                      }}
+                    />
+                  )
+                }}
+              
+              >{markdown}</ReactMarkdown>)
             }
           />
         </div>
@@ -98,23 +132,11 @@ function CreatePost() {
           />
         </div>
 
-        {/* Upload image */}
+        {/* Multiple image file input */}
         <div style={{ marginBottom: '1rem' }}>
-          <label>Upload Image</label><br />
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
+          <label>Upload one or more images</label><br />
+          <input type="file" multiple accept="image/*" onChange={handleImagesChange} />
         </div>
-
-        {/* Image preview (optional) */}
-        {imagePreview && (
-          <div style={{ marginTop: '1rem' }}>
-            <strong>Preview:</strong><br />
-            <img
-              src={imagePreview}
-              alt="Preview"
-              style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '0.5rem' }}
-            />
-          </div>
-        )}
 
         <button
           type="submit"
