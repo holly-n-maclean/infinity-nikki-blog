@@ -2,14 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import TagList from '../components/TagList';
+import Pagination from '../components/Pagination'; // Import the Pagination component
 
 function Home() {
     const [posts, setPosts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
     useEffect(() => {
-        Axios.get('http://localhost:5000/api/posts')
-            .then(res => {setPosts(res.data);})
+        Axios.get(`http://localhost:5000/api/posts?page=${currentPage}&limit=5`)
+            .then(res => {
+            setPosts(res.data.posts);
+            setTotalPages(res.data.pages);
+            })
             .catch(err => console.error('Error fetching posts:', err));
-    }, []);
+        }, [currentPage]);
 
     const getThumbnailFromContent = (markdown) => {
         const match = markdown.match(/!\[.*?\]\((.*?)\)/);
@@ -86,7 +93,13 @@ function Home() {
                 </div>
               </div>
             );
+            
           })}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            />
         </div>
       );
     }

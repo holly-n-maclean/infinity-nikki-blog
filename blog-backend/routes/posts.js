@@ -24,12 +24,25 @@ router.get('/test', (req, res) => {
 
 //GET all posts
 router.get('/', async (req, res) => {
-    try {
-        const posts =  await Post.find().sort({ createdAt: -1 }); //find posts, find newest first
-        res.json(posts); //send posts to client
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching posts' });
-    }
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
+
+  try {
+      const total = await Post.countDocuments();
+      const posts = await Post.find()
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * limit)
+          .limit(limit);
+
+      res.json({
+          posts,
+          total,
+          page,
+          pages: Math.ceil(total / limit)
+      });
+  } catch (error) {
+      res.status(500).json({ error: 'Error fetching posts' });
+  }
 });
 
 // POST a new post
@@ -54,12 +67,23 @@ router.post('/', upload.single('image'), async (req, res) => {
 
 // GET posts by tag
 router.get('/tag/:tag', async (req, res) => {
+    const { tag } = req.params; // get tag from request params
+    const page = parseInt(req.query.page) || 1; // get page number from query params, default to 1
+    const limit = parseInt(req.query.limit) || 5; // get limit from query params, default to 5
+
     try {
-        const posts = await Post.find({ tags: req.params.tag }); // find posts by tag
-        res.json(posts); // send posts to client
-    } catch (error) {
+      const query = { tags: tag }; // query to find posts by tag
+        const total = await Post.countDocuments(query); // count total posts matching the query
+        const posts = await Post.find(query)
+        .sort({ createdAt: -1 }) // find posts, sort by createdAt in descending order
+        .skip((page - 1) * limit) // skip posts for pagination
+        .limit(limit); // limit number of posts returned
+
+        res.json({ posts, total, page, pages: Math.ceil(total / limit)}); 
+      } catch (error) {
+        console.error('Error fetching paginated tag posts:', error);
         res.status(500).json({ error: 'Error fetching posts by tag' });
-    }
+      }
 });
 
 // GET a single post by ID
