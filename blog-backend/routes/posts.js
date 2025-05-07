@@ -34,13 +34,14 @@ router.get('/', async (req, res) => {
 
 // POST a new post
 router.post('/', upload.single('image'), async (req, res) => {
-    const { title,  content, tags } = req.body;
+    const { title,  content, images, tags } = req.body;
 
     try {
         const newPost = new Post({
             title,
             content,
-            tags: tags.split(',').map(tag => tag.trim()), // convert tags to array
+            images,
+            tags: Array.isArray(tags) ? tags : [],
         });
 
     
@@ -49,6 +50,16 @@ router.post('/', upload.single('image'), async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'Error creating post' });
     }    
+});
+
+// GET posts by tag
+router.get('/tag/:tag', async (req, res) => {
+    try {
+        const posts = await Post.find({ tags: req.params.tag }); // find posts by tag
+        res.json(posts); // send posts to client
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching posts by tag' });
+    }
 });
 
 // GET a single post by ID
@@ -73,7 +84,7 @@ router.put('/:id', async (req, res) => {
         {
           title,
           content,
-          tags: tags.split(',').map(tag => tag.trim())
+          tags: Array.isArray(tags) ? tags : [], // tags need to be an array
         },
         { new: true } // Return the updated document
       );

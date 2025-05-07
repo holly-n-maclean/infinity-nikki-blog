@@ -9,10 +9,11 @@ function CreatePost() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
+  const [tags, setTags] = useState([]);
   const [selectedTab, setSelectedTab] = useState('write');
   const [success, setSuccess] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
+  const [tagInput, setTagInput] = useState([]);
 
   const handleImagesChange = async (e) => {
     const files = Array.from(e.target.files);
@@ -123,14 +124,67 @@ function CreatePost() {
 
         {/* Tags */}
         <div style={{ marginBottom: '1rem' }}>
-          <input
-            type="text"
-            placeholder="Tags (comma separated)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            style={{ width: '100%', padding: '0.5rem' }}
-          />
+        <input
+          type="text"
+          value={tagInput}
+          onChange={(e) => setTagInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              const trimmed = tagInput.trim();
+              if (trimmed && !tags.includes(trimmed)) {
+                setTags([...tags, trimmed]);
+                setTagInput('');
+              }
+            }
+          }}
+          placeholder="Enter tag and press Enter"
+          style={{
+            width: '100%',
+            padding: '0.5rem',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            marginBottom: '0.5rem'
+          }}
+        />
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          {tags.map((tag, i) => (
+            <span
+              key={i}
+              style={{
+                backgroundColor: '#f3f4f6',
+                color: '#374151',
+                padding: '0.4rem 0.75rem',
+                borderRadius: '9999px',
+                fontSize: '0.85rem',
+                fontWeight: 500,
+                border: '1px solid #e5e7eb',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              {tag}
+              <button
+                type="button"
+                onClick={() => setTags(tags.filter((_, index) => index !== i))}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#6b7280',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  lineHeight: 1
+                }}
+                aria-label={`Remove ${tag}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
         </div>
+      </div>
 
         {/* Multiple image file input */}
         <div style={{ marginBottom: '1rem' }}>

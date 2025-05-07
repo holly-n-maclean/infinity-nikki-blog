@@ -87,7 +87,7 @@ function PostPage() {
               display: 'inline-block',
             }}
           >
-            #{tag}
+            {tag}
           </span>
         ))}
       </div>
@@ -113,6 +113,21 @@ function PostPage() {
         }}
       >
         Delete Post
+      </button>
+
+      <button
+        onClick={() => navigate(`/posts/edit/${id}`)}
+        style={{
+          marginLeft: '1rem',
+          padding: '0.6rem 1.2rem',
+          background: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+        >
+        Edit Post
       </button>
     </div>
   );

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import TagList from '../components/TagList';
+
 function Home() {
     const [posts, setPosts] = useState([]);
     useEffect(() => {
@@ -64,22 +66,7 @@ function Home() {
                   </p>
     
                   {/* Tags */}
-                  <div style={{ marginBottom: '1rem' }}>
-                    {post.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        style={{
-                          background: '#f0f0f0',
-                          borderRadius: '5px',
-                          padding: '3px 8px',
-                          marginRight: '5px',
-                          fontSize: '0.8rem',
-                        }}
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
+                  <TagList tags={post.tags} />
     
                   {/* Read more button */}
                   <Link

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import CreatePost from './pages/CreatePost';
 import PostPage from './pages/PostPage';
+import EditPost from './pages/EditPost';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/posts/:id" element={<PostPage />} />
+        <Route path="/posts/edit/:id" element={<EditPost />} />
       </Routes>
     </Router>
   );
