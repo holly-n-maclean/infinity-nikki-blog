@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-
 import Home from './pages/Home';
 import CreatePost from './pages/CreatePost';
 import PostPage from './pages/PostPage';
 import EditPost from './pages/EditPost';
+import TagPage from './pages/TagPage';
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
         <Route path="/create" element={<CreatePost />} />
         <Route path="/posts/:id" element={<PostPage />} />
         <Route path="/posts/edit/:id" element={<EditPost />} />
+        <Route path="/tags/:tag" element={<TagPage />} />
       </Routes>
     </Router>
   );

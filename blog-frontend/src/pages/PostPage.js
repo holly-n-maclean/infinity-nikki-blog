@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import TagList from '../components/TagList';
 
 function PostPage() {
   const { id } = useParams();
@@ -74,23 +75,7 @@ function PostPage() {
       </div>
 
       {/* Tags */}
-      <div style={{ marginTop: '2rem' }}>
-        {post.tags.map((tag, index) => (
-          <span
-            key={index}
-            style={{
-              background: '#f3f3f3',
-              borderRadius: '5px',
-              padding: '6px 10px',
-              marginRight: '8px',
-              fontSize: '0.85rem',
-              display: 'inline-block',
-            }}
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+      <TagList tags={post.tags} />
 
       {/* Deleted message */}
       {deletedMessage && (
