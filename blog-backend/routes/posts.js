@@ -18,6 +18,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+const jwt = require('jsonwebtoken'); // import jsonwebtoken for token verification
+
+function authenticate(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: 'Missing token' });
+
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' });
+    req.user = user;
+    next();
+  });
+}
+
 router.get('/test', (req, res) => {
     res.send('Posts route is working!');
   });
@@ -46,7 +60,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST a new post
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', authenticate, upload.single('image'), async (req, res) => {
     const { title,  content, images, tags } = req.body;
 
     try {
@@ -99,7 +113,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // UPDATE a post by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
     const { title, content, tags } = req.body;
   
     try {
@@ -122,7 +136,7 @@ router.put('/:id', async (req, res) => {
   });
 
   // Upload image
-  router.post('/upload', upload.single('image'), (req, res) => {
+  router.post('/upload', authenticate, upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
     }
@@ -132,7 +146,7 @@ router.put('/:id', async (req, res) => {
 
   
   // DELETE a post by ID
-  router.delete('/:id', async (req, res) => {
+  router.delete('/:id', authenticate, async (req, res) => {
     console.log('Received DELETE request for ID:', req.params.id);
     try {
       const deleted = await Post.findByIdAndDelete(req.params.id);
