@@ -62,6 +62,7 @@ router.get('/', async (req, res) => {
 // POST a new post
 router.post('/', authenticate, upload.single('image'), async (req, res) => {
     const { title,  content, images, tags } = req.body;
+    const username = req.user.username; // get username from token
 
     try {
         const newPost = new Post({
@@ -69,6 +70,7 @@ router.post('/', authenticate, upload.single('image'), async (req, res) => {
             content,
             images,
             tags: Array.isArray(tags) ? tags : [],
+            author: username,
         });
 
     

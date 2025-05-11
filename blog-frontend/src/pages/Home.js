@@ -46,7 +46,7 @@ function Home() {
                 <h2>{post.title}</h2>
               </Link>
 
-              <p className="post-date">{formatDate(post.createdAt)}</p>
+              <p className="post-date">Posted by <strong>{post.author}</strong> on {formatDate(post.createdAt)}</p>
 
               <p className="post-excerpt">
                 {post.content.replace(/!\[.*?\]\(.*?\)/g, '').substring(0, 140)}...

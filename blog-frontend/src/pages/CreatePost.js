@@ -18,14 +18,17 @@ function CreatePost() {
   const handleImagesChange = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
+
+    const token = localStorage.getItem('token');
   
     for (const file of files) {
       const formData = new FormData();
       formData.append('image', file);
+      
   
       try {
         const res = await Axios.post('http://localhost:5000/api/posts/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+          headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` }
         });
   
         const imageUrl = `http://localhost:5000/uploads/${res.data.filename}`;
@@ -53,8 +56,10 @@ function CreatePost() {
           const formData = new FormData();
           formData.append('image', file);
 
+          const token = localStorage.getItem('token');
+
           const res = await Axios.post('http://localhost:5000/api/posts/upload', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
+            headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` }
           });
 
           const imageUrl = `http://localhost:5000/uploads/${res.data.filename}`;
@@ -62,10 +67,16 @@ function CreatePost() {
         }
       }
 
+      const token = localStorage.getItem('token');
+
       await Axios.post('http://localhost:5000/api/posts', {
         title,
         content: finalContent,
         tags
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       setSuccess(true);

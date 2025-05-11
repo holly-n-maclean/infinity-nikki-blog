@@ -24,9 +24,20 @@ function PostPage() {
   }, [id]);
 
   const handleDelete = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in to delete this post.');
+      return;
+    }
+  
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await Axios.delete(`http://localhost:5000/api/posts/${id}`);
+        await Axios.delete(`http://localhost:5000/api/posts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
         setDeletedMessage('Post deleted successfully!');
         setTimeout(() => navigate('/'), 1500);
       } catch (error) {
@@ -49,7 +60,7 @@ function PostPage() {
 
       {/* Optional: Post Date */}
       <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '2rem' }}>
-        Posted on {formatDate(post.createdAt)}
+        Posted by <strong>{post.author}</strong> on {formatDate(post.createdAt)}
       </p>
 
       {/* Post Content with styled images */}
@@ -86,37 +97,48 @@ function PostPage() {
       )}
 
       {/* Delete Button */}
-      <button
-        onClick={handleDelete}
-        style={{
-          marginTop: '2rem',
-          padding: '0.6rem 1.2rem',
-          background: '#ff4d4d',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-        }}
-      >
-        Delete Post
-      </button>
+      {localStorage.getItem('token') && (
+  <>
+    <button
+      onClick={handleDelete}
+      style={{
+        marginTop: '2rem',
+        padding: '0.6rem 1.2rem',
+        background: '#ff4d4d',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+    >
+      Delete Post
+    </button>
 
-      <button
-        onClick={() => navigate(`/posts/edit/${id}`)}
-        style={{
-          marginLeft: '1rem',
-          padding: '0.6rem 1.2rem',
-          background: '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-        }}
-        >
-        Edit Post
-      </button>
-    </div>
-    </div>
+    <button
+      onClick={() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('You must be logged in to edit posts.');
+          return;
+        }
+        navigate(`/posts/edit/${id}`);
+      }}
+      style={{
+        marginLeft: '1rem',
+        padding: '0.6rem 1.2rem',
+        background: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+      }}
+    >
+      Edit Post
+    </button>
+  </>
+  )}
+  </div>
+  </div>
   );
 }
 
