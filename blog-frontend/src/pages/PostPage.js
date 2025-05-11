@@ -43,7 +43,8 @@ function PostPage() {
     });
 
   return (
-    <div className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+    <div style={{ backgroundColor: '#fce4ec', minHeight: '100vh', padding: '2rem' }}>
+    <div className="post-page-card">
       <h1 style={{ marginBottom: '0.5rem' }}>{post.title}</h1>
 
       {/* Optional: Post Date */}
@@ -114,6 +115,7 @@ function PostPage() {
         >
         Edit Post
       </button>
+    </div>
     </div>
   );
 }

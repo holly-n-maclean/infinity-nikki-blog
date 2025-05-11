@@ -14,12 +14,22 @@ function App() {
     <div className="nav-container">
       <div className="logo-area">
         <div className="logo-circle">N</div>
-        <h1 className="site-title">Nikki Blog</h1>
+        <h1 className="site-title">Luna's Nikki Blog</h1>
       </div>
       <div className="nav-links">
         <Link to="/">Home</Link>
         <Link to="/create">Create</Link>
-        <Link to="/tags">Tags</Link>
+        <div className="dropdown">
+          <span className="dropdown-label">Tags ▾</span>
+          <div className="dropdown-menu">
+            {/* Add my tags */}
+            <Link to="/tags/sweet" className="dropdown-item">#sweet</Link>
+            <Link to="/tags/elegant" className="dropdown-item">#elegant</Link>
+            <Link to="/tags/fresh" className="dropdown-item">#fresh</Link>
+            <Link to="/tags/sexy" className="dropdown-item">#sexy</Link>
+            <Link to="/tags/cool" className="dropdown-item">#cool</Link>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
