@@ -32,6 +32,8 @@ function PostPage() {
   
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
+        const token = localStorage.getItem('token');
+
         await Axios.delete(`http://localhost:5000/api/posts/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -56,10 +58,10 @@ function PostPage() {
   return (
     <div style={{ backgroundColor: '#fce4ec', minHeight: '100vh', padding: '2rem' }}>
     <div className="post-page-card">
-      <h1 style={{ marginBottom: '0.5rem' }}>{post.title}</h1>
+      <h1 className="post-header">{post.title}</h1>
 
       {/* Optional: Post Date */}
-      <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '2rem' }}>
+      <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '2rem', marginLeft: '1rem' }}>
         Posted by <strong>{post.author}</strong> on {formatDate(post.createdAt)}
       </p>
 

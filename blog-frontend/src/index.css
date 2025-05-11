@@ -115,7 +115,6 @@ nav a.button:hover {
 /* Post card styling */
 .post-card {
   display: flex;
-  border: 1px solid #ddd;
   border-radius: 10px;
   margin-bottom: 1.5rem;
   overflow: hidden;
@@ -154,17 +153,29 @@ nav a.button:hover {
 
 .post-title-link {
   text-decoration: none;
-  color: #222;
+  color: #85a9d3;
 }
 
 .post-title-link h2 {
   margin: 0 0 0.5rem 0;
 }
 
+.post-header {
+  font-size: 1.8rem;
+  margin-left: 0.5rem;
+  font-weight: 600;
+  color: #85a9d3;
+}
+
+.post-title-link h2:hover {
+  color: #ccd4ee;
+}
+
 .post-date {
   color: #888;
   font-size: 0.8rem;
-  margin-top: -0.5rem;
+  margin-left: 0.1rem;
+  margin-top: -0.2rem;
   margin-bottom: 0.75rem;
 }
 
@@ -173,19 +184,20 @@ nav a.button:hover {
   margin-bottom: 1rem;
 }
 
+
 .read-more-button {
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: #007bff;
+  background: #bf98cf;
   color: white;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 9px;
   font-size: 0.9rem;
   transition: background 0.2s ease;
 }
 
 .read-more-button:hover {
-  background: #0056b3;
+  background: #e1cef1;
 }
 
 /* Dropdown styling */

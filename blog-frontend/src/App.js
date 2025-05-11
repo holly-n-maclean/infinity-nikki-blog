@@ -22,7 +22,9 @@ function App() {
       </div>
       <div className="nav-links">
       <Link to="/">Home</Link>
-      <Link to="/create">Create</Link>
+      {username && (
+        <Link to="/create">Create</Link>
+      )}
 
       <div className="dropdown">
         <span className="dropdown-label">Tags ▾</span>

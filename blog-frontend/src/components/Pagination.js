@@ -78,7 +78,7 @@ const buttonStyle = (isActiveOrDisabled) => ({
   padding: '0.4rem 0.8rem',
   border: '1px solid #ccc',
   borderRadius: '4px',
-  background: isActiveOrDisabled ? '#007bff' : '#fff',
+  background: isActiveOrDisabled ? '#bf98cf' : '#fff',
   color: isActiveOrDisabled ? '#fff' : '#333',
   cursor: isActiveOrDisabled ? 'default' : 'pointer',
   pointerEvents: isActiveOrDisabled ? 'none' : 'auto',

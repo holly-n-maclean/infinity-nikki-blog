@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import  { useAuth } from '../context/AuthContext';
+
 
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const location = useLocation(); // Get the current location
   const navigate = useNavigate();
-const { login } = useAuth(); // Access the login function from AuthContext
+  const { login } = useAuth(); // Access the login function from AuthContext
+  const from = location.state?.from || '/'; // Redirect to the page user came from
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,7 +26,7 @@ const { login } = useAuth(); // Access the login function from AuthContext
       localStorage.setItem('token', token); // store token for use later
 
       login(res.data.token); 
-      navigate('/'); // redirect to homepage or /create
+      navigate(from); 
     } catch (err) {
       console.error(err);
       setErrorMsg('Login failed. Check your username or password.');

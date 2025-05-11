@@ -32,6 +32,7 @@ function EditPost() {
   const handleImagesChange = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
+    const token = localStorage.getItem('token');
 
     for (const file of files) {
       const formData = new FormData();
@@ -39,7 +40,7 @@ function EditPost() {
 
       try {
         const res = await Axios.post('http://localhost:5000/api/posts/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+          headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
         const imageUrl = `http://localhost:5000/uploads/${res.data.filename}`;
@@ -62,6 +63,10 @@ function EditPost() {
         title,
         content,
         tags
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
 
       navigate(`/posts/${id}`);
