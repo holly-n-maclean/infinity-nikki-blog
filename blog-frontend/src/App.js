@@ -5,28 +5,30 @@ import CreatePost from './pages/CreatePost';
 import PostPage from './pages/PostPage';
 import EditPost from './pages/EditPost';
 import TagPage from './pages/TagPage';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <Router>
-      <nav style={{ padding: '1rem', background: '#f0f0f0', marginBottom: '2rem' }}>
-        <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
-        <Link to="/create" style={{
-          background: '#007bff',
-          color: 'white',
-          padding: '0.5rem 1rem',
-          borderRadius: '5px',
-          textDecoration: 'none'
-        }}>
-          Create Post
-        </Link>
-      </nav>
+      <nav className="top-nav">
+    <div className="nav-container">
+      <div className="logo-area">
+        <div className="logo-circle">N</div>
+        <h1 className="site-title">Nikki Blog</h1>
+      </div>
+      <div className="nav-links">
+        <Link to="/">Home</Link>
+        <Link to="/create">Create</Link>
+        <Link to="/tags">Tags</Link>
+      </div>
+    </div>
+  </nav>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create" element={<CreatePost />} />
-        <Route path="/posts/:id" element={<PostPage />} />
-        <Route path="/posts/edit/:id" element={<EditPost />} />
-        <Route path="/tags/:tag" element={<TagPage />} />
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/create" element={<Layout><CreatePost /></Layout>} />
+        <Route path="/posts/:id" element={<Layout><PostPage /></Layout>} />
+        <Route path="/posts/edit/:id" element={<Layout><EditPost /></Layout>} />
+        <Route path="/tags/:tag" element={<Layout><TagPage /></Layout>} />
       </Routes>
     </Router>
   );

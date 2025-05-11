@@ -33,27 +33,66 @@ body {
 }
 
 /* Navbar */
-nav {
-  background: #ffffff;
-  padding: 1rem 2rem;
+/* Nav bar base */
+.top-nav {
+  background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Container */
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
+/* Logo area */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-nav a.button {
-  background-color: #007bff;
+.logo-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #f8a5c2;
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.site-title {
+  font-size: 1.5rem;
+  color: #c44569;
+  font-weight: 600;
+}
+
+/* Nav links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #c44569;
 }
 
 /* Button hover effect */
