@@ -87,19 +87,7 @@ function TagPage() {
 
                 <TagList tags={post.tags} />
 
-                <Link
-                  to={`/posts/${post._id}`}
-                  style={{
-                    display: 'inline-block',
-                    marginTop: '0.75rem',
-                    padding: '0.5rem 1rem',
-                    background: '#007bff',
-                    color: 'white',
-                    textDecoration: 'none',
-                    borderRadius: '5px',
-                    fontSize: '0.9rem',
-                  }}
-                >
+                <Link to={`/posts/${post._id}`} className="read-more-button">
                   Read More →
                 </Link>
               </div>

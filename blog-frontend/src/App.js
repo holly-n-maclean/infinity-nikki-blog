@@ -8,6 +8,7 @@ import TagPage from './pages/TagPage';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import { useAuth } from './context/AuthContext';
+import About from './pages/About';
 
 function App() {
   const { username, logout } = useAuth();
@@ -17,11 +18,12 @@ function App() {
       <nav className="top-nav">
     <div className="nav-container">
       <div className="logo-area">
-        <div className="logo-circle">N</div>
+        <div className="logo-circle">L</div>
         <h1 className="site-title">Luna's Nikki Blog</h1>
       </div>
       <div className="nav-links">
       <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
       {username && (
         <Link to="/create">Create</Link>
       )}
@@ -65,6 +67,7 @@ function App() {
   </nav>
       <Routes>
         <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/create" element={<Layout><CreatePost /></Layout>} />
         <Route path="/posts/:id" element={<Layout><PostPage /></Layout>} />
         <Route path="/posts/edit/:id" element={<Layout><EditPost /></Layout>} />

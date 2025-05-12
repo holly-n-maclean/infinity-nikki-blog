@@ -1,9 +1,13 @@
 /* Reset margins */
 body {
   margin: 0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'helvetica neue', sans-serif;
   background-color: #fafafa;
   color: #333;
+}
+
+h1, h2, .fancy-header {
+  font-family: 'Cinzel', serif;
 }
 
 /* Center main content */
@@ -153,7 +157,7 @@ nav a.button:hover {
 
 .post-title-link {
   text-decoration: none;
-  color: #85a9d3;
+  color: #6283a8;
 }
 
 .post-title-link h2 {
@@ -168,7 +172,7 @@ nav a.button:hover {
 }
 
 .post-title-link h2:hover {
-  color: #ccd4ee;
+  color: #a4b0d8;
 }
 
 .post-date {

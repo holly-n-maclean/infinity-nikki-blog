@@ -33,7 +33,18 @@ function Home() {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">Posts & Updates</h1>
+      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <img
+          src="/images/homeimage.png"
+          alt="Posts and Updates Banner"
+          style={{
+            maxWidth: '60%',
+            height: 'auto',
+            backgroundColor: '#fce4ec'
+          }}
+        />
+      </div>
+
 
       {posts.map(post => {
         const thumbnail = getThumbnailFromContent(post.content) || 'https://via.placeholder.com/300x200?text=No+Image';

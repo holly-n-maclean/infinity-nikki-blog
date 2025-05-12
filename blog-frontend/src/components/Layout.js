@@ -2,19 +2,38 @@ import React from 'react';
 
 function Layout({ children }) {
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#fce4ec', color: '#4a4a4a' }}>
-          
-      {/* Main Content */}
-      <main className="flex-grow container mx-auto px-4 py-8">
+    <div
+      className="layout-wrapper"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        backgroundColor: '#fce4ec',
+      }}
+    >
+      {/* Main content area */}
+      <main
+        className="container"
+        style={{
+          flex: 1,
+          padding: '2rem',
+        }}
+      >
         {children}
       </main>
 
-      {/* Footer */}
-      <footer style={{ backgroundColor: '#fff', textAlign: "center"}} className="text-slate-800 py-6 mt-12">
-        <div className="container mx-auto text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Luna's Nikki Blog. All rights reserved.</p>
-          <p className="mt-2">Crafted with 💕 By Holly MacLean</p>
-        </div>
+      {/* Footer pinned to bottom */}
+      <footer
+        style={{
+          backgroundColor: '#fff',
+          textAlign: 'center',
+          padding: '1.5rem',
+          color: '#555',
+          fontSize: '0.9rem',
+        }}
+      >
+        <p>&copy; {new Date().getFullYear()} Luna's Nikki Blog. All rights reserved.</p>
+        <p style={{ marginTop: '0.5rem' }}>Crafted with 💕 by Holly MacLean</p>
       </footer>
     </div>
   );
