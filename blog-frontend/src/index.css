@@ -273,3 +273,23 @@ nav a.button:hover {
   background-color: #d0f4fa; /* pale yellow */
   color: #4881a7;
 }
+
+@media (max-width: 600px) {
+  .post-card {
+    flex-direction: column;
+  }
+
+  .post-card img {
+    width: 100%;
+    height: auto;
+  }
+
+  .nav-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

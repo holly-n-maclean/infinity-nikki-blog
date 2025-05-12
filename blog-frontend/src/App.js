@@ -16,12 +16,12 @@ function App() {
   return (
     <Router>
       <nav className="top-nav">
-    <div className="nav-container">
+      <div className="nav-container flex flex-col sm:flex-row sm:justify-between sm:items-center text-center sm:text-left gap-4 sm:gap-0">
       <div className="logo-area">
         <div className="logo-circle">L</div>
         <h1 className="site-title">Luna's Nikki Blog</h1>
       </div>
-      <div className="nav-links">
+      <div className="nav-links flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center sm:justify-end items-center sm:items-center w-full">
       <Link to="/">Home</Link>
       <Link to="/about">About</Link>
       {username && (
